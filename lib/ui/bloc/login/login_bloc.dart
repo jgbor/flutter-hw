@@ -36,10 +36,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state is LoginLoading) return;
     emit(LoginLoading());
     try {
-      // emit(LoginSuccess());
-      emit(LoginForm());
+      if (preferences.containsKey('token')) {
+        final token = preferences.getString('token')!;
+        if (token.isNotEmpty) {
+          emit(LoginSuccess());
+        }
+      }
     } catch (e) {
       emit(LoginError(e.toString()));
+    } finally {
       emit(LoginForm());
     }
   }
