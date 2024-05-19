@@ -20,7 +20,7 @@ class _ListPageBlocState extends State<ListPageBloc> {
 
   void _logout() {
     GetIt.I<SharedPreferences>().remove('token');
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   @override
