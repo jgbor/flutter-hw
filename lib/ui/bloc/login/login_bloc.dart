@@ -28,6 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginSuccess());
     } on DioException catch (e) {
       emit(LoginError(e.response?.data["message"] ?? 'Unknown error'));
+    } finally {
       emit(LoginForm());
     }
   }
