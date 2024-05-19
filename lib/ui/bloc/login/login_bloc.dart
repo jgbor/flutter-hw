@@ -1,38 +1,44 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_homework/network/remote_service.dart';
+import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginForm()) {
-    on<LoginSubmitEvent>(
-          (event, emit) async {
-        if (state is LoginLoading) return;
-        emit(LoginLoading());
-        try {
-          emit(LoginSuccess());
-        } catch (e) {
-          emit(LoginError(e.toString()));
-          emit(LoginForm());
-        }
-      },
-    );
+  final preferences = GetIt.I<SharedPreferences>();
 
-    on<LoginAutoLoginEvent>(
-      (event, emit) async {
-        if (state is LoginLoading) return;
-        emit(LoginLoading());
-        try {
-          emit(LoginSuccess());
-        } catch (e) {
-          emit(LoginError(e.toString()));
-          emit(LoginForm());
-        }
+  LoginBloc() : super(LoginForm()) {
+    on<LoginSubmitEvent>(_onLoginSubmit);
+    on<LoginAutoLoginEvent>(_onAutoLogin);
+  }
+
+  void _onLoginSubmit(LoginSubmitEvent event, Emitter<LoginState> emit) async {
+    if (state is LoginLoading) return;
+    emit(LoginLoading());
+    try {
+      final token = await remoteService.login(event.email, event.password);
+      if (event.rememberMe) {
+        preferences.setString('token', token);
       }
-    );
+      emit(LoginSuccess());
+    } catch (e) {
+      emit(LoginError(e.toString()));
+      emit(LoginForm());
+    }
+  }
+
+  void _onAutoLogin(LoginAutoLoginEvent event, Emitter<LoginState> emit) async {
+    if (state is LoginLoading) return;
+    emit(LoginLoading());
+    try {
+      emit(LoginSuccess());
+    } catch (e) {
+      emit(LoginError(e.toString()));
+      emit(LoginForm());
+    }
   }
 }

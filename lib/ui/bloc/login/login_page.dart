@@ -12,28 +12,26 @@ class LoginPageBloc extends StatefulWidget {
 
 class _LoginPageBlocState extends State<LoginPageBloc> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   var _rememberMe = false;
   static const int _minPasswordLength = 6;
 
   @override
   void initState() {
-
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    context.read<LoginBloc>().add(LoginAutoLoginEvent());
     super.initState();
   }
 
   String? _validateEmail(String? email) {
-    if (isEmail(email!)){
+    if (isEmail(email!)) {
       return null;
     }
     return "Invalid email";
   }
 
   String? _validatePassword(String? password) {
-    if (isLength(password!, _minPasswordLength)){
+    if (isLength(password!, _minPasswordLength)) {
       return null;
     }
     return "Password must be at least $_minPasswordLength characters";
@@ -46,67 +44,72 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
         body: Container(
           padding: const EdgeInsets.all(16),
           child: BlocConsumer<LoginBloc, LoginState>(
-            listenWhen: (_, state) => state is LoginError,
+            listenWhen: (_, state) =>
+                state is LoginError || state is LoginSuccess,
             listener: (context, state) {
               if (state is LoginError) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(state.message)));
+              } else {
+                Navigator.pushReplacementNamed(context, '/list');
               }
             },
-            buildWhen: (_, state) => state is! LoginError,
+            buildWhen: (_, state) =>
+                state is! LoginError || state is! LoginSuccess,
             builder: (context, state) {
-              if (state is LoginLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is LoginSuccess) {
-                return const Center(child: Text('Success'));
-              } else if (state is LoginForm) {
-                return Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _emailController,
-                          validator: _validateEmail,
-                          decoration: const InputDecoration(labelText: 'Email',),
+              return Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _emailController,
+                        validator: _validateEmail,
+                        enabled: state is! LoginLoading,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
                         ),
-                        TextFormField(
-                            controller: _passwordController,
-                            validator: _validatePassword,
-                            decoration: const InputDecoration(labelText: 'Password',)
-                        ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: _rememberMe,
-                                onChanged: (bool? value) {
+                      ),
+                      TextFormField(
+                          controller: _passwordController,
+                          validator: _validatePassword,
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          enabled: state is! LoginLoading,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                          )),
+                      Row(children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (state is! LoginLoading)
+                              ? (bool? value) {
                                   setState(() {
                                     _rememberMe = value!;
                                   });
-                                  },
-                              ),
-                              const Text('Remember me')
-                            ]
+                                }
+                              : null,
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<LoginBloc>().add(
-                                LoginSubmitEvent(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                  _rememberMe,
-                                ),
-                              );
-                            }
-                            },
-                          child: const Text('Login'),
-                        ),
-                      ],
-                    )
-                );
-              } else {
-                return const SizedBox();
-              }
+                        const Text('Remember me')
+                      ]),
+                      ElevatedButton(
+                        onPressed: state is! LoginLoading
+                            ? () {
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<LoginBloc>().add(
+                                        LoginSubmitEvent(
+                                          _emailController.text,
+                                          _passwordController.text,
+                                          _rememberMe,
+                                        ),
+                                      );
+                                }
+                              }
+                            : null,
+                        child: const Text('Login'),
+                      ),
+                    ],
+                  ));
             },
           ),
         ));
