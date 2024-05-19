@@ -10,8 +10,6 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final preferences = GetIt.I<SharedPreferences>();
-
   LoginBloc() : super(LoginForm()) {
     on<LoginSubmitEvent>(_onLoginSubmit);
     on<LoginAutoLoginEvent>(_onAutoLogin);
@@ -19,11 +17,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onLoginSubmit(LoginSubmitEvent event, Emitter<LoginState> emit) async {
     if (state is LoginLoading) return;
-    emit(LoginLoading());
     try {
+      emit(LoginLoading());
       final token = await remoteService.login(event.email, event.password);
       if (event.rememberMe) {
-        preferences.setString('token', token);
+        GetIt.I<SharedPreferences>().setString('token', token);
       }
       remoteService.setToken(token);
       emit(LoginSuccess());
@@ -36,10 +34,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onAutoLogin(LoginAutoLoginEvent event, Emitter<LoginState> emit) async {
     if (state is LoginLoading) return;
-    emit(LoginLoading());
     try {
-      if (preferences.containsKey('token')) {
-        final token = preferences.getString('token')!;
+      if (GetIt.I<SharedPreferences>().containsKey('token')) {
+        final token = GetIt.I<SharedPreferences>().getString('token')!;
         if (token.isNotEmpty) {
           remoteService.setToken(token);
           emit(LoginSuccess());
@@ -47,7 +44,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } catch (e) {
       emit(LoginError(e.toString()));
-    } finally {
       emit(LoginForm());
     }
   }
