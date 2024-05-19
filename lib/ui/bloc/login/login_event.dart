@@ -18,3 +18,12 @@ class LoginAutoLoginEvent extends LoginEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ChangeRememberMeEvent extends LoginEvent {
+  final bool rememberMe;
+
+  ChangeRememberMeEvent(this.rememberMe);
+
+  @override
+  List<Object?> get props => [rememberMe];
+}

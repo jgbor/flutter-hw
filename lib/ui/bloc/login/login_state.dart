@@ -4,8 +4,12 @@ part of 'login_bloc.dart';
 abstract class LoginState extends Equatable {}
 
 class LoginForm extends LoginState {
+  final bool rememberMe;
+
+  LoginForm({this.rememberMe = false});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [rememberMe];
 }
 
 class LoginLoading extends LoginState {
