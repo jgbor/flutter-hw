@@ -11,6 +11,7 @@ class LoginPageBloc extends StatefulWidget {
 }
 
 class _LoginPageBlocState extends State<LoginPageBloc> {
+  final _formKey = GlobalKey<FormState>();
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   var _rememberMe = false;
@@ -18,17 +19,24 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
 
   @override
   void initState() {
+
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
   }
 
-  bool _validateEmail(String email) {
-    return isEmail(email);
+  String? _validateEmail(String? email) {
+    if (isEmail(email!)){
+      return null;
+    }
+    return "Invalid email";
   }
 
-  bool _validatePassword(String password) {
-    return isLength(password, _minPasswordLength);
+  String? _validatePassword(String? password) {
+    if (isLength(password!, _minPasswordLength)){
+      return null;
+    }
+    return "Password must be at least $_minPasswordLength characters";
   }
 
   @override
@@ -52,54 +60,53 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
               } else if (state is LoginSuccess) {
                 return const Center(child: Text('Success'));
               } else if (state is LoginForm) {
-                return Column(
-                  children: [
-                    TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        errorText: _validateEmail(_emailController.text)
-                            ? null
-                            : 'Invalid email',
-                      ),
-                    ),
-                    TextFormField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                            labelText: 'Password',
-                            errorText: _validatePassword(
-                                    _passwordController.text)
-                                ? null
-                                : 'Password must be at least $_minPasswordLength characters'
-                        )
-                    ),
-                    Row(children: [
-                      Checkbox(
-                        value: _rememberMe,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _rememberMe = value!;
-                          });
-                        },
-                      ),
-                      const Text('Remember me')
-                    ]),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<LoginBloc>().add(
-                              LoginSubmitEvent(
-                                _emailController.text,
-                                _passwordController.text,
-                                _rememberMe,
+                return Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          validator: _validateEmail,
+                          decoration: const InputDecoration(labelText: 'Email',),
+                        ),
+                        TextFormField(
+                            controller: _passwordController,
+                            validator: _validatePassword,
+                            decoration: const InputDecoration(labelText: 'Password',)
+                        ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _rememberMe,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _rememberMe = value!;
+                                  });
+                                  },
                               ),
-                            );
-                      },
-                      child: const Text('Login'),
-                    ),
-                  ],
+                              const Text('Remember me')
+                            ]
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<LoginBloc>().add(
+                                LoginSubmitEvent(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  _rememberMe,
+                                ),
+                              );
+                            }
+                            },
+                          child: const Text('Login'),
+                        ),
+                      ],
+                    )
                 );
+              } else {
+                return const SizedBox();
               }
-              return const SizedBox();
             },
           ),
         ));
