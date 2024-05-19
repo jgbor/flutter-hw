@@ -25,6 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.rememberMe) {
         preferences.setString('token', token);
       }
+      remoteService.setToken(token);
       emit(LoginSuccess());
     } on DioException catch (e) {
       emit(LoginError(e.response?.data["message"] ?? 'Unknown error'));
@@ -40,6 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (preferences.containsKey('token')) {
         final token = preferences.getString('token')!;
         if (token.isNotEmpty) {
+          remoteService.setToken(token);
           emit(LoginSuccess());
         }
       }

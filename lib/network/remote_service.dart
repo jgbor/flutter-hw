@@ -6,14 +6,19 @@ class _RemoteService {
   final _dio = GetIt.I<Dio>();
 
   Future<List<UserItem>> getUsers() async {
-    return [];
+    final response = await _dio.get("/users");
+    return [
+      for (final item in response.data) UserItem(item["name"], item["avatarUrl"])
+    ];
   }
 
   Future<String> login(String email, String password) async {
     final response = await _dio.post("/login", data: {"email": email, "password": password});
-    final token = response.data["token"];
+    return  response.data["token"];
+  }
+
+  void setToken(String token) {
     _dio.options.headers["Authorization"] = "Bearer $token";
-    return token;
   }
 }
 

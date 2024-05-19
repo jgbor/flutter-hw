@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_homework/network/user_item.dart';
 import 'package:meta/meta.dart';
@@ -17,8 +18,8 @@ class ListBloc extends Bloc<ListEvent, ListState> {
           try {
             var users = await remoteService.getUsers();
             emit(ListLoaded(users));
-          } catch (e) {
-            emit(ListError(e.toString()));
+          } on DioException catch (e) {
+            emit(ListError(e.response?.data["message"] ?? 'Unknown error'));
             emit(ListInitial());
           }
         }
