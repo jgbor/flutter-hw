@@ -62,6 +62,7 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                   child: Column(
                     children: [
                       TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         validator: _validateEmail,
                         enabled: state is! LoginLoading,
