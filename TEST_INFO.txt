@@ -1,3 +1,3 @@
 JCIRJL
 bloc
-<Házi feladat értékelése>
+A Flutter alapjainak elsajátítására alkalmas a házifeladat.
