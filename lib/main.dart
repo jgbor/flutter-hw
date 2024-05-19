@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +47,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Homework',
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+        colorSchemeSeed: Colors.lightGreen,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.lightGreen,
+        ),
         useMaterial3: true,
       ),
       routes: {

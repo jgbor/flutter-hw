@@ -54,13 +54,23 @@ class _ListPageBlocState extends State<ListPageBloc> {
                   itemCount: state.users.length,
                   itemBuilder: (context, index) {
                     final item = state.users[index];
-                    return ListTile(
-                      title: Text(item.name),
+                    return Container(
+                      margin: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(item.avatarUrl),
+                        ),
+                        title: Text(item.name),
+                      ),
                     );
                   },
                 );
               } else {
-                return const Center(child: Text('Unknown state'));
+                return const SizedBox();
               }
             },
           ),

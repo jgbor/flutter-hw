@@ -106,7 +106,10 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                                 }
                               }
                             : null,
-                        child: const Text('Login'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        child: Text('Login', style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
                       ),
                     ],
                   ));
