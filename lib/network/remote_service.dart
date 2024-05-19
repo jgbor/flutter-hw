@@ -10,12 +10,10 @@ class _RemoteService {
   }
 
   Future<String> login(String email, String password) async {
-    try {
-      final response = await _dio.post("/login", data: {"email": email, "password": password});
-      return response.data["token"];
-    } catch (e) {
-      rethrow;
-    }
+    final response = await _dio.post("/login", data: {"email": email, "password": password});
+    final token = response.data["token"];
+    _dio.options.headers["Authorization"] = "Bearer $token";
+    return token;
   }
 }
 
