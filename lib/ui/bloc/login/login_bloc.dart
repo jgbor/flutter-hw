@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_homework/network/remote_service.dart';
 import 'package:get_it/get_it.dart';
@@ -25,8 +26,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         preferences.setString('token', token);
       }
       emit(LoginSuccess());
-    } catch (e) {
-      emit(LoginError(e.toString()));
+    } on DioException catch (e) {
+      emit(LoginError(e.response?.data["message"] ?? 'Unknown error'));
       emit(LoginForm());
     }
   }
@@ -35,7 +36,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state is LoginLoading) return;
     emit(LoginLoading());
     try {
-      emit(LoginSuccess());
+      // emit(LoginSuccess());
+      emit(LoginForm());
     } catch (e) {
       emit(LoginError(e.toString()));
       emit(LoginForm());

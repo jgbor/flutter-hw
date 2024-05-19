@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_homework/network/user_item.dart';
 import 'package:get_it/get_it.dart';
 
-class RemoteService {
+class _RemoteService {
   final _dio = GetIt.I<Dio>();
 
   Future<List<UserItem>> getUsers() async {
@@ -10,12 +10,13 @@ class RemoteService {
   }
 
   Future<String> login(String email, String password) async {
-    final response = await _dio.post("/login", data: {"email": email, "password": password});
-    if (response.data.containsKey("token")) {
+    try {
+      final response = await _dio.post("/login", data: {"email": email, "password": password});
       return response.data["token"];
+    } catch (e) {
+      rethrow;
     }
-    throw Exception(response.data["message"]);
   }
 }
 
-final remoteService = RemoteService();
+final remoteService = _RemoteService();
