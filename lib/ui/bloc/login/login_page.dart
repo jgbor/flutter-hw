@@ -13,6 +13,8 @@ class LoginPageBloc extends StatefulWidget {
 class _LoginPageBlocState extends State<LoginPageBloc> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  var _rememberMe = false;
+  static const int _minPasswordLength = 6;
 
   @override
   void initState() {
@@ -23,6 +25,10 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
 
   bool _validateEmail(String email) {
     return isEmail(email);
+  }
+
+  bool _validatePassword(String password) {
+    return isLength(password, _minPasswordLength);
   }
 
   @override
@@ -50,20 +56,29 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                   children: [
                     TextField(
                       controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        errorText: _validateEmail(_emailController.text)
+                            ? null
+                            : 'Invalid email',
+                      ),
                     ),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
+                    TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                            labelText: 'Password',
+                            errorText: _validatePassword(
+                                    _passwordController.text)
+                                ? null
+                                : 'Password must be at least $_minPasswordLength characters'
+                        )
                     ),
                     Row(children: [
                       Checkbox(
-                        value: state.rememberMe,
+                        value: _rememberMe,
                         onChanged: (bool? value) {
                           setState(() {
-                            context
-                                .read<LoginBloc>()
-                                .add(ChangeRememberMeEvent(value ?? false));
+                            _rememberMe = value!;
                           });
                         },
                       ),
@@ -75,7 +90,7 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                               LoginSubmitEvent(
                                 _emailController.text,
                                 _passwordController.text,
-                                state.rememberMe,
+                                _rememberMe,
                               ),
                             );
                       },
@@ -87,8 +102,7 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
               return const SizedBox();
             },
           ),
-        )
-    );
+        ));
   }
 
   @override

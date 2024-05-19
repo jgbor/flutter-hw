@@ -34,12 +34,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       }
     );
-
-    on<ChangeRememberMeEvent>(
-      (event, emit) async {
-        if (state is! LoginForm) return;
-        emit(LoginForm(rememberMe: event.rememberMe));
-      }
-    );
   }
 }
