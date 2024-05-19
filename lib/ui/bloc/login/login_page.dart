@@ -24,14 +24,20 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
   }
 
   String? _validateEmail(String? email) {
-    if (isEmail(email!)) {
+    if (email == null || email.isEmpty) {
+      return null;
+    }
+    if (isEmail(email)) {
       return null;
     }
     return "Invalid email";
   }
 
   String? _validatePassword(String? password) {
-    if (isLength(password!, _minPasswordLength)) {
+    if (password == null || password.isEmpty) {
+      return null;
+    }
+    if (isLength(password, _minPasswordLength)) {
       return null;
     }
     return "Password must be at least $_minPasswordLength characters";
@@ -69,6 +75,11 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                         decoration: const InputDecoration(
                           labelText: 'Email',
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            _formKey.currentState!.validate();
+                          });
+                        },
                       ),
                       TextFormField(
                           controller: _passwordController,
@@ -79,7 +90,13 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                           enabled: state is! LoginLoading,
                           decoration: const InputDecoration(
                             labelText: 'Password',
-                          )),
+                          ),
+                        onChanged: (value) {
+                          setState(() {
+                            _formKey.currentState!.validate();
+                          });
+                        },
+                      ),
                       Row(children: [
                         Checkbox(
                           value: _rememberMe,

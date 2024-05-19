@@ -23,7 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginLoading());
       final token = await remoteService.login(event.email, event.password);
       if (event.rememberMe) {
-        GetIt.I<SharedPreferences>().setString('token', token);
+        GetIt.I<SharedPreferences>().setString("token", token);
       }
       remoteService.setToken(token);
       emit(LoginSuccess());
@@ -37,8 +37,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _onAutoLogin(LoginAutoLoginEvent event, Emitter<LoginState> emit) async {
     if (state is LoginLoading) return;
     try {
-      if (GetIt.I<SharedPreferences>().containsKey('token')) {
-        final token = GetIt.I<SharedPreferences>().getString('token')!;
+      if (GetIt.I<SharedPreferences>().containsKey("token")) {
+        final token = GetIt.I<SharedPreferences>().getString("token")!;
         if (token.isNotEmpty) {
           remoteService.setToken(token);
           emit(LoginSuccess());
