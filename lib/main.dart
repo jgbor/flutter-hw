@@ -10,6 +10,8 @@ import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'network/remote_service.dart';
+
 //DO NOT MODIFY
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +38,8 @@ Future configureFixDependencies() async {
 
 //Add custom dependencies if necessary
 Future configureCustomDependencies() async {
-
+  var remoteService = RemoteService();
+  GetIt.I.registerSingleton(remoteService);
 }
 
 class MyApp extends StatelessWidget {

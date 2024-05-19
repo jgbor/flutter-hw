@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_homework/network/user_item.dart';
 import 'package:get_it/get_it.dart';
 
-class _RemoteService {
+class RemoteService {
   Future<List<UserItem>> getUsers() async {
     final response = await GetIt.I<Dio>().get("/users");
     return [
@@ -19,5 +19,3 @@ class _RemoteService {
     GetIt.I<Dio>().options.headers["Authorization"] = "Bearer $token";
   }
 }
-
-final remoteService = _RemoteService();

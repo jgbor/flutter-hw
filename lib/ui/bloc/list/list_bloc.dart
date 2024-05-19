@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_homework/network/user_item.dart';
+import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
 import '../../../network/remote_service.dart';
@@ -10,6 +11,8 @@ part 'list_event.dart';
 part 'list_state.dart';
 
 class ListBloc extends Bloc<ListEvent, ListState> {
+  final remoteService = GetIt.I<RemoteService>();
+
   ListBloc() : super(ListInitial()) {
     on<ListLoadEvent>(
         (event, emit) async {
