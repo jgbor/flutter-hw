@@ -22,7 +22,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
             var users = await remoteService.getUsers();
             emit(ListLoaded(users));
           } on DioException catch (e) {
-            emit(ListError(e.response?.data["message"] ?? 'Unknown error'));;
+            emit(ListError(e.response?.data["message"] ?? 'Unknown error'));
           }
         }
     );
