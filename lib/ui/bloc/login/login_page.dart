@@ -46,7 +46,7 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Login')),
+        appBar: AppBar(),
         body: Container(
           padding: const EdgeInsets.all(16),
           child: BlocConsumer<LoginBloc, LoginState>(
@@ -66,7 +66,13 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
               return Form(
                   key: _formKey,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const Text(
+                        "Login",
+                        style: TextStyle(fontSize: 32),
+                      ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
@@ -97,7 +103,9 @@ class _LoginPageBlocState extends State<LoginPageBloc> {
                           });
                         },
                       ),
-                      Row(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
                         Checkbox(
                           value: _rememberMe,
                           onChanged: (state is! LoginLoading)
