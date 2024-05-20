@@ -1,3 +1,3 @@
 JCIRJL
 bloc
-A Flutter alapjainak elsajátítására alkalmas a házifeladat. A tesztekkel viszont sok porbléma van, pl mást használunk mint az elképzelt dolog (avatarnak én CircularAvatart használtam, de a teszt Image.network-öt vár el, és egyéb megoldásoknál is volt ilyen)
+A Flutter alapjainak elsajátítására alkalmas a házifeladat. A tesztekkel viszont sok porbléma van, pl mást használunk mint az elképzelt dolog (avatarnak én CircularAvatart használtam, de a teszt Image.network-öt vár el, és egyéb megoldásoknál is volt ilyen). Sok helyen a tesztekből nem igazán derül ki, miért is nem fut le, annak ellenére, hogy az app maga helyesen működik.
