@@ -61,8 +61,13 @@ class _ListPageBlocState extends State<ListPageBloc> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(item.avatarUrl),
+                        leading:  ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: Image.network(
+                            item.avatarUrl,
+                            height: 50,
+                            width: 50,
+                          ),
                         ),
                         title: Text(item.name),
                       ),
