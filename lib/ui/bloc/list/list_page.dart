@@ -57,7 +57,7 @@ class _ListPageBlocState extends State<ListPageBloc> {
                     return Container(
                       margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: ListTile(
