@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_homework/network/user_item.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../network/remote_service.dart';
 
@@ -20,10 +19,6 @@ class ListBloc extends Bloc<ListEvent, ListState> {
           if (state is ListLoading) return;
           emit(ListLoading());
           try {
-            var res = GetIt.I<SharedPreferences>().getString("token");
-            if (res!= null) {
-              remoteService.setToken(res);
-            }
             var users = await remoteService.getUsers();
             emit(ListLoaded(users));
           } on DioException catch (e) {

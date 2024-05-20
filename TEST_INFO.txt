@@ -1,3 +1,3 @@
 JCIRJL
 bloc
-A Flutter alapjainak elsajátítására alkalmas a házifeladat. A tesztekkel viszont sok porbléma van, pl mást használunk mint a teszt által elvárt dolog (avatarnak én CircularAvatart használtam, de a teszt Image.network-öt vár el, és egyéb megoldásoknál is volt ilyen), vagy egy teszt valamiért nem fut le, de a program működik, ezért random helyekre az ember megpróbál pár sort beírni, hátha a teszt is jó lesz utána. (Specifikusan a Had no token-en belül az [5]-ös volt ilyen nekem, hiába működött a gyakorlatban az app, a teszt nem futott le, ezért próbálgattam a kódot módosítgatni, hogy ne rontsa el a többit, de ez is lefusson).
+A Flutter alapjainak elsajátítására alkalmas a házifeladat. A tesztekkel viszont sok porbléma van, pl mást használunk mint az elképzelt dolog (avatarnak én CircularAvatart használtam, de a teszt Image.network-öt vár el, és egyéb megoldásoknál is volt ilyen)
